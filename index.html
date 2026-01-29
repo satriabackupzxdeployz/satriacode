@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SatriaCodeShare - Berbagi Kode</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="like-notification" id="likeNotification"></div>
+
+    <div class="container">
+        <div class="header">
+            <div class="status-badge">SATRIACODESHARE • BERBAGI KODE & PROYEK</div>
+            <h1>SATRIACODESHARE</h1>
+            <p>Platform berbagi kode, project, dan file programming • 100% Gratis</p>
+        </div>
+
+        <div class="main-nav">
+            <button class="nav-btn active" data-section="browse">
+                <i class="fas fa-newspaper"></i> Beranda
+            </button>
+            <button class="nav-btn" data-section="admin">
+                <i class="fas fa-user-shield"></i> Admin Panel
+            </button>
+        </div>
+
+        <div class="section active" id="browseSection">
+            <div class="posts-timeline" id="postsTimeline"></div>
+            <div class="empty-state" id="emptyState">
+                <i class="fas fa-code"></i>
+                <h3>Tidak ada postingan</h3>
+                <p>Login sebagai admin untuk membuat postingan pertama!</p>
+            </div>
+        </div>
+
+        <div class="section" id="adminSection">
+            <div class="admin-access">
+                <div class="card">
+                    <h2><i class="fas fa-user-shield"></i> LOGIN ADMIN</h2>
+                    <p>Masukkan kunci admin untuk mengakses panel</p>
+                    <input type="password" class="admin-key-input" id="adminKeyInput" placeholder="Masukkan kunci admin">
+                    <button class="btn btn-primary" id="adminAccessBtn">
+                        <i class="fas fa-unlock"></i> LOGIN
+                    </button>
+                </div>
+            </div>
+
+            <div class="admin-panel" id="adminPanel">
+                <div class="card">
+                    <h2><i class="fas fa-plus-circle"></i> BUAT POSTINGAN BARU</h2>
+
+                    <div class="form-group">
+                        <label for="postTitle"><i class="fas fa-heading"></i> JUDUL POSTINGAN</label>
+                        <input type="text" id="postTitle" class="form-control" placeholder="Contoh: Cara Membuat API dengan Express.js">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postDescription"><i class="fas fa-align-left"></i> DESKRIPSI</label>
+                        <textarea id="postDescription" class="form-control" rows="3" placeholder="Jelaskan tentang kode/project ini..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postAuthor"><i class="fas fa-user"></i> NAMA PENULIS</label>
+                        <input type="text" id="postAuthor" class="form-control" placeholder="Nama Anda" value="Admin">
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-code"></i> BAHASA PEMROGRAMAN</label>
+                        <select id="postLanguage" class="form-control">
+                            <option value="javascript">JavaScript</option>
+                            <option value="python">Python</option>
+                            <option value="java">Java</option>
+                            <option value="php">PHP</option>
+                            <option value="html">HTML/CSS</option>
+                            <option value="cpp">C++</option>
+                            <option value="csharp">C#</option>
+                            <option value="other">Lainnya</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postTags"><i class="fas fa-tags"></i> TAGS (pisahkan dengan koma)</label>
+                        <input type="text" id="postTags" class="form-control" placeholder="api, backend, nodejs, express">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="postCode"><i class="fas fa-file-code"></i> KODE</label>
+                        <textarea id="postCode" class="code-editor" placeholder="Tempelkan kode Anda di sini..."></textarea>
+                    </div>
+
+                    <div class="btn-group">
+                        <button class="btn btn-secondary" id="previewPostBtn">
+                            <i class="fas fa-eye"></i> PREVIEW
+                        </button>
+                        <button class="btn btn-primary" id="publishPostBtn">
+                            <i class="fas fa-paper-plane"></i> PUBLISH
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2><i class="fas fa-cogs"></i> MANAGE POSTINGAN</h2>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-database"></i> POSTINGAN TERBIT</label>
+                        <div id="adminPostsList"></div>
+                    </div>
+
+                    <div class="admin-actions">
+                        <button class="btn btn-danger" id="clearAllPostsBtn">
+                            <i class="fas fa-trash"></i> HAPUS SEMUA
+                        </button>
+                        <button class="btn btn-secondary" id="exportPostsBtn">
+                            <i class="fas fa-download"></i> EXPORT DATA
+                        </button>
+                        <button class="btn btn-success" id="refreshAdminBtn">
+                            <i class="fas fa-sync"></i> REFRESH
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="alert" id="alertMessage"></div>
+
+        <div class="footer">
+            <p>© 2024 SatriaCodeShare - Platform Berbagi Kode & Project</p>
+            <p class="footer-links">
+                <a href="#"><i class="fas fa-question-circle"></i> Bantuan</a>
+                <a href="#"><i class="fas fa-user-shield"></i> Privasi</a>
+                <a href="#"><i class="fas fa-file-contract"></i> Syarat</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="project-modal" id="postModal">
+        <div class="modal-content">
+            <div class="modal-close" id="modalClose">&times;</div>
+            
+            <div class="modal-header">
+                <h1 class="modal-title" id="modalPostTitle">Post Title</h1>
+                <div class="modal-meta">
+                    <span class="post-language" id="modalPostLanguage">JavaScript</span>
+                    <span class="modal-author">
+                        <i class="fas fa-user"></i> <span id="modalPostAuthor">Admin</span>
+                    </span>
+                    <span class="modal-time">
+                        <i class="fas fa-clock"></i> <span id="modalPostTime">Baru saja</span>
+                    </span>
+                    <span class="modal-views">
+                        <i class="fas fa-eye"></i> <span id="modalViews">0</span> views
+                    </span>
+                </div>
+            </div>
+
+            <div id="modalPostDescription"></div>
+            <div id="modalPostTags"></div>
+
+            <div class="modal-code" id="modalPostCode"></div>
+
+            <div class="modal-stats-actions">
+                <div class="modal-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-heart"></i>
+                        <span id="modalLikes">0</span> likes
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-download"></i>
+                        <span id="modalDownloads">0</span> downloads
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-comment"></i>
+                        <span id="modalCommentsCount">0</span> comments
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn btn-like" id="modalLikeBtn">
+                        <i class="fas fa-heart"></i> LIKE
+                    </button>
+                    <button class="btn btn-primary" id="modalDownloadBtn">
+                        <i class="fas fa-download"></i> DOWNLOAD
+                    </button>
+                    <button class="btn btn-secondary" id="modalCopyBtn">
+                        <i class="fas fa-copy"></i> SALIN KODE
+                    </button>
+                </div>
+            </div>
+
+            <div class="comments-section" id="commentsSection">
+                <div class="comments-title">
+                    <i class="fas fa-comments"></i> KOMENTAR (<span id="commentsCount">0</span>)
+                </div>
+                
+                <div class="comments-list" id="commentsList"></div>
+
+                <div class="comment-form">
+                    <input type="text" class="comment-input" id="commentAuthor" placeholder="Nama Anda" maxlength="50">
+                    <input type="text" class="comment-input" id="commentText" placeholder="Tulis komentar..." maxlength="500">
+                    <button class="btn btn-primary" id="submitCommentBtn">
+                        <i class="fas fa-paper-plane"></i> KIRIM
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
